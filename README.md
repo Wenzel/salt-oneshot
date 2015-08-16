@@ -44,7 +44,7 @@ Apply
 
 To apply the configuration on your machine, just run :
 
-    ./run.py --local state.highstate
+    ./run.py localhost state.highstate
 
 To apply it on a server :
 
@@ -55,18 +55,17 @@ Usage
 -----
 
 
+    """
     Usage:
         run.py [options] -s
         run.py [options] <host> [<argn>...]
-        run.py [options] --local [<argn>...]
 
     Options:
         -s --setup                              Init salt submodule and install it into the current virtualenv
-        -l --local                              Apply configuration to localhost using salt-call instead of salt-ssh
         -u=USER --user=USER                     Connect to the host as USER [Default: root]
         --pillar=PATH                           Set PATH as pillar root
         --file=PATH                             Set PATH as file root
         --config=PATH                           Set PATH as config directory
         -v=LEVEL --verbosity=LEVEL              Log verbosity (all | garbage | trace | debug | info | warning | error | critical | quiet) [Default: info]
         -h --help                               Show this screen.
-
+    """
