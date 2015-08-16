@@ -1,0 +1,16 @@
+root_dir: ./config
+
+file_roots:
+    base:
+        - ./salt
+
+pillar_roots:
+    base:
+        - ./pillar
+
+fileserver_backend:
+  - roots
+  - git
+
+# gitfs_remotes:
+#   - https://github.com/saltstack-formulas/openssh-formula
