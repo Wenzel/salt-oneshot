@@ -9,7 +9,7 @@ Options:
     -s --setup                              Init salt submodule and install it into the current virtualenv
     -u=USER --user=USER                     Connect to the host as USER [Default: root]
     --pillar=PATH                           Set PATH as pillar root
-    --file=PATH                             Set PATH as file root
+    --salt=PATH                             Set PATH as salt modules root
     --config=PATH                           Set PATH as config directory
     -v=LEVEL --verbosity=LEVEL              Log verbosity (all | garbage | trace | debug | info | warning | error | critical | quiet) [Default: info]
     -h --help                               Show this screen.
@@ -44,9 +44,9 @@ def main(args):
     pillar_root = args['--pillar']
     if not pillar_root:
         pillar_root = os.path.join(SCRIPT_DIR, 'pillar')
-    file_root = args['--file']
-    if not file_root:
-        file_root = os.path.join(SCRIPT_DIR, 'salt')
+    salt_root = args['--salt']
+    if not salt_root:
+        salt_root = os.path.join(SCRIPT_DIR, 'salt')
     ssh_user = args['--user']
     host = args['<host>']
 
@@ -65,7 +65,7 @@ def main(args):
     if host == 'localhost':
         # salt-call
         cmd = ['salt-call'] + ['--local'] + cmd
-        cmd.extend(['--file-root={}'.format(file_root)])
+        cmd.extend(['--salt-root={}'.format(salt_root)])
         cmd.extend(['--pillar-root={}'.format(pillar_root)])
     else:
         # salt-ssh
