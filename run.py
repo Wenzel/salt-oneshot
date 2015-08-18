@@ -7,9 +7,9 @@ Usage:
 
 Options:
     -s --setup                              Init salt submodule and install it into the current virtualenv
-    -u=USER --user=USER                     Connect to the host as USER [Default: root]
-    --pillar=PATH                           Set PATH as pillar root
-    --salt=PATH                             Set PATH as salt modules root
+    -u=USER --user=USER                     Connect to the host as USER (Only on remote host) [Default: root]
+    --pillar=PATH                           Set PATH as pillar root (Only on localhost)
+    --salt=PATH                             Set PATH as salt modules root (Only on localhost)
     --config=PATH                           Set PATH as config directory
     -v=LEVEL --verbosity=LEVEL              Log verbosity (all | garbage | trace | debug | info | warning | error | critical | quiet) [Default: info]
     -h --help                               Show this screen.
