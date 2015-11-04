@@ -65,7 +65,7 @@ def main(args):
     if host == 'localhost':
         # salt-call
         cmd = ['salt-call'] + ['--local'] + cmd
-        cmd.extend(['--salt-root={}'.format(salt_root)])
+        cmd.extend(['--file-root={}'.format(salt_root)])
         cmd.extend(['--pillar-root={}'.format(pillar_root)])
     else:
         # salt-ssh
