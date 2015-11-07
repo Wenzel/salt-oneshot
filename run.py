@@ -8,9 +8,7 @@ Usage:
 Options:
     -s --setup                              Init salt submodule and install it into the current virtualenv
     -u=USER --user=USER                     Connect to the host as USER (Only on remote host) [Default: root]
-    --pillar=PATH                           Set PATH as pillar root (Only on localhost)
-    --salt=PATH                             Set PATH as salt modules root (Only on localhost)
-    --config=PATH                           Set PATH as config directory
+    -r=DIR --root=DIR                      Specify DIR to find salt/ pillar/ and config/ root dirs
     -v=LEVEL --verbosity=LEVEL              Log verbosity (all | garbage | trace | debug | info | warning | error | critical | quiet) [Default: info]
     -h --help                               Show this screen.
 """
@@ -28,7 +26,8 @@ def setup():
     subprocess.call(['git', 'submodule', 'update', '-f', '--init'])
     subprocess.Popen(['./setup.py', 'build'], cwd=os.path.join(SCRIPT_DIR, 'salt-source'))
     subprocess.Popen(['./setup.py', 'install'], cwd=os.path.join(SCRIPT_DIR, 'salt-source'))
-    subprocess.Popen(['pip', 'install', '-r', os.path.join(SCRIPT_DIR, 'salt-source', '_requirements.txt')], )
+    subprocess.Popen(['./setup.py', 'install'], cwd=os.path.join(SCRIPT_DIR, 'salt-source'))
+    subprocess.Popen(['pip', 'install', '-r', os.path.join(SCRIPT_DIR, 'salt-source', 'requirements', 'base.txt')], )
     subprocess.Popen(['pip', 'install', 'GitPython']) # salt formulas
 
 
@@ -38,21 +37,19 @@ def main(args):
         return setup()
 
     verb_lvl = args['--verbosity']
-    config_dir = args['--config']
-    if not config_dir:
-        config_dir = os.path.join(SCRIPT_DIR, 'config')
-    pillar_root = args['--pillar']
-    if not pillar_root:
-        pillar_root = os.path.join(SCRIPT_DIR, 'pillar')
-    salt_root = args['--salt']
-    if not salt_root:
-        salt_root = os.path.join(SCRIPT_DIR, 'salt')
+    root_dir = args['--root']
+    if not root_dir:
+        root_dir = SCRIPT_DIR
     ssh_user = args['--user']
     host = args['<host>']
 
+    salt_root = os.path.join(root_dir, 'salt')
+    pillar_root = os.path.join(root_dir, 'pillar')
+    config_root = os.path.join(root_dir, 'config')
+
     # common
     cmd_common = []
-    cmd_common.extend(['--config-dir={}'.format(config_dir)])
+    cmd_common.extend(['--config-dir={}'.format(config_root)])
     cmd_common.extend(['--log-file={}'.format(os.path.join(SCRIPT_DIR, 'salt.log'))])
     cmd_common.extend(['--log-file-level={}'.format(verb_lvl)])
     cmd_common.extend(['--log-level={}'.format(verb_lvl)])
@@ -60,16 +57,17 @@ def main(args):
 
     # cmd
     cmd = []
-    cmd.extend(cmd_common)
     roster = None
     if host == 'localhost':
         # salt-call
-        cmd = ['salt-call'] + ['--local'] + cmd
+        cmd = ['salt-call', '--local']
+        cmd.extend(cmd_common)
         cmd.extend(['--file-root={}'.format(salt_root)])
         cmd.extend(['--pillar-root={}'.format(pillar_root)])
     else:
         # salt-ssh
-        cmd = ['salt-ssh'] + ['--askpass'] + ['-i'] + cmd
+        cmd = ['salt-ssh', '--askpass', '-i']
+        cmd.extend(cmd_common)
         cmd.extend(['--user={}'.format(ssh_user)])
         # create roaster file
         roster = NamedTemporaryFile()
