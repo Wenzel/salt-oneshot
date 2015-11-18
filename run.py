@@ -26,7 +26,6 @@ def setup():
     subprocess.call(['git', 'submodule', 'update', '-f', '--init'])
     subprocess.Popen(['./setup.py', 'build'], cwd=os.path.join(SCRIPT_DIR, 'salt-source'))
     subprocess.Popen(['./setup.py', 'install'], cwd=os.path.join(SCRIPT_DIR, 'salt-source'))
-    subprocess.Popen(['./setup.py', 'install'], cwd=os.path.join(SCRIPT_DIR, 'salt-source'))
     subprocess.Popen(['pip', 'install', '-r', os.path.join(SCRIPT_DIR, 'salt-source', 'requirements', 'base.txt')], )
     subprocess.Popen(['pip', 'install', 'GitPython']) # salt formulas
 
