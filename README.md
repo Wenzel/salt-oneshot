@@ -7,7 +7,7 @@ a `SaltStack` configuration, without requiring to set up a salt master server.
 Requirements
 ------------
 
-- `Python >= 2.7`
+- `Python >= 3.4`
 - `virtualenv`
 
 Setup
