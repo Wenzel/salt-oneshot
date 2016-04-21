@@ -44,7 +44,7 @@ def main(args):
 
     salt_root = os.path.join(root_dir, 'salt')
     pillar_root = os.path.join(root_dir, 'pillar')
-    config_root = os.path.join(root_dir, 'config')
+    config_root = os.path.join(SCRIPT_DIR, 'config')
 
     # common
     cmd_common = []
